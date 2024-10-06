@@ -3,13 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo Curator</title>
+    <title>Image Categorizer</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>Welcome to the Photo Curator!</h1>
-    </header>
-    <!-- Rest of your HTML -->
+    <h1>Upload Your Image</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="file" id="fileInput">
+        <button type="submit">Upload</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(event) {
+            event.preventDefault();
+            let fileInput = document.getElementById('fileInput');
+            let formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            let response = await fetch('http://localhost:5000/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            let result = await response.json();
+            document.getElementById('responseMessage').innerText = result.result;
+        }
+    </script>
 </body>
 </html>

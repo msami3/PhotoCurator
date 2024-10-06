@@ -1,16 +1,79 @@
-body {
-    font-family: Arial, sans-serif;
+/* Reset some basic styles */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-header {
-    background-color: #4caf77; /* Green */
-    color: rgb(119, 11, 11);
-    padding: 15px;
-    text-align: center;
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
 }
 
 h1 {
-    color: rgb(165, 6, 6); /* Add color to header text */
+    margin-bottom: 20px;
+    color: #4CAF50;
+    font-size: 2em;
+}
+
+form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+input[type="file"] {
+    margin: 15px 0;
+    padding: 10px;
+    border: 2px dashed #4CAF50;
+    border-radius: 8px;
+    font-size: 1em;
+    width: 100%;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    outline: none;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#responseMessage {
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    form {
+        padding: 15px;
+    }
+    
+    button {
+        width: 100%;
+    }
 }
