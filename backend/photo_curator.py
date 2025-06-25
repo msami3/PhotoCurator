@@ -135,3 +135,5 @@ async def organize_photos(files: List[UploadFile] = File(...)):
 
 if __name__ == "__main__":
     uvicorn.run("photo_curator:app", host="0.0.0.0", port=8000, reload=True)
+
+
