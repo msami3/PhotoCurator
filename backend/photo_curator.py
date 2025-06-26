@@ -17,7 +17,7 @@ INPUT_FOLDER = "sample_photos"
 OUTPUT_FOLDER = "organized_photos"
 NUM_CLUSTERS = 4
 MODEL_NAME = "openai/clip-vit-base-patch32"
-BLUR_THRESHOLD = 100.0  # lower = blurrier
+BLUR_THRESHOLD = 10.0  # lower = blurrier
 TOP_PICKS_PERCENT = 0.1  # top 10% by sharpness
 
 # Load model
@@ -54,6 +54,18 @@ def blur_score(image_path):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     variance = cv2.Laplacian(gray, cv2.CV_64F).var()
     return variance
+
+@app.delete("/clear")
+def clear_folders():
+    try:
+        if os.path.exists(INPUT_FOLDER):
+            rmtree(INPUT_FOLDER)
+        if os.path.exists(OUTPUT_FOLDER):
+            rmtree(OUTPUT_FOLDER)
+        return {"message": "Folders cleared successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/organize")
 async def organize_photos(files: List[UploadFile] = File(...)):
@@ -119,13 +131,13 @@ async def organize_photos(files: List[UploadFile] = File(...)):
                 copy2(src, dst_top)
                 results["Top_Picks"].append(fname)
 
-        trash_folder = os.path.join(OUTPUT_FOLDER, "Trash")
+        trash_folder = os.path.join(OUTPUT_FOLDER, "Blur Photos")
         os.makedirs(trash_folder, exist_ok=True)
         for fname in blurry_filenames:
             src = os.path.join(INPUT_FOLDER, fname)
             dst = os.path.join(trash_folder, fname)
             copy2(src, dst)
-        results["Trash"] = blurry_filenames
+        results["Blur Photos"] = blurry_filenames
 
         return JSONResponse(content=results)
 
@@ -134,6 +146,4 @@ async def organize_photos(files: List[UploadFile] = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    uvicorn.run("photo_curator:app", host="0.0.0.0", port=8000, reload=True)
-
-
+    uvicorn.run("backend/photo_curator:app", host="0.0.0.0", port=8000, reload=True)
